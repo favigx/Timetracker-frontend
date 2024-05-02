@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 interface TimerProps {
     onStart: () => void;
-    onStop: () => void;
+    onStop: (time: number) => void;
 }
 
 const Timer = ({ onStart, onStop }: TimerProps) => {
@@ -34,7 +34,7 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
 
     const stopTimer = () => {
         setIsRunning(false);
-        onStop();
+        onStop(time);
         setStopped(true);
     };
 

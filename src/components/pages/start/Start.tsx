@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Timer from '../../Timer';
 
 interface Task {
+    id: string
     taskName: string;
     comment: string;
     totalTime: number | null;
@@ -9,6 +10,7 @@ interface Task {
 
 function Start() {
     const [newTask, setNewTask] = useState<Task>({
+        id: "",
         taskName: "",
         comment: "",
         totalTime: null
@@ -51,6 +53,27 @@ function Start() {
     const goBack = () => {
         setSelectedTask(null);
     };
+    
+    const onStopTimer = (time: number) => {
+
+         fetch(`http://localhost:8080/tasktime/${selectedTask?.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                totalTime: time
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Kunde inte spara tiden!");
+            }
+        })
+        .catch(error => {
+            console.error("Error saving time:", error);
+        });
+    };
 
     return ( 
         <div className='body'>
@@ -77,7 +100,7 @@ function Start() {
                     </div>
                     <Timer
                         onStart={() => {}}
-                        onStop={() => {}}
+                        onStop={onStopTimer}
                     />
                     <button onClick={goBack}>Gå tillbaka till alla uppgifter</button>
                 </div>
