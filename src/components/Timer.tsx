@@ -1,14 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import SessionData from './interface/SessionData';
 
 interface TimerProps {
-    onStart: () => void;
-    onStop: (time: number) => void;
+    onStart: (sessionData: SessionData) => void;
+    onStop: (sessionData: SessionData) => void;
 }
+
 
 const Timer = ({ onStart, onStop }: TimerProps) => {
     const [time, setTime] = useState<number>(0);
     const [isRunning, setIsRunning] = useState<boolean>(false);
     const [stopped, setStopped] = useState<boolean>(false);
+    const [startTime, setStartTime] = useState<string>(''); 
+    const [stopTime, setStopTime] = useState<string>(''); 
+    const [sessionDate, setSessionDate] = useState<Date>(new Date()); 
+
     let interval: number | undefined;
 
     useEffect(() => {
@@ -25,7 +31,17 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
 
     const startTimer = () => {
         setIsRunning(true);
-        onStart();
+        const currentDate = new Date();
+        const startTimeString = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setStartTime(startTimeString);
+        onStart({
+            startTime: startTimeString,
+            stopTime,
+            sessionDate: sessionDate.toLocaleDateString('sv-SE'), 
+            totalTime: time,
+            time: 0,
+            taskName: ''
+        });
     };
 
     const pauseTimer = () => {
@@ -34,7 +50,17 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
 
     const stopTimer = () => {
         setIsRunning(false);
-        onStop(time);
+        const currentDate = new Date();
+        const stopTimeString = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setStopTime(stopTimeString);
+        onStop({
+            startTime,
+            stopTime: stopTimeString,
+            sessionDate: currentDate.toLocaleDateString('sv-SE'), 
+            totalTime: time,
+            time: 0,
+            taskName: ''
+        });
         setStopped(true);
     };
 

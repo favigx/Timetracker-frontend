@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
 import Timer from '../../Timer';
+import Task from '../../interface/Interface';
+import SessionData from '../../interface/SessionData';
 
-interface Task {
-    id: string
-    taskName: string;
-    comment: string;
-    totalTime: number | null;
-}
 
 function Start() {
     const [newTask, setNewTask] = useState<Task>({
-        id: "",
         taskName: "",
         comment: "",
         totalTime: null
@@ -54,15 +49,40 @@ function Start() {
         setSelectedTask(null);
     };
     
-    const onStopTimer = (time: number) => {
-
-         fetch(`http://localhost:8080/tasktime/${selectedTask?.id}`, {
+    const onStopTimer = (sessionData: SessionData) => {
+        const { startTime, stopTime, sessionDate, totalTime} = sessionData;
+    
+    
+        fetch(`http://localhost:8080/tasksession/${selectedTask?.taskName}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                startTime: startTime,
+                stopTime: stopTime,
+                sessionDate: sessionDate,
+                time: totalTime,
+                taskName: selectedTask?.taskName
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Kunde inte skapa en ny session!");
+            }
+        })
+        .catch(error => {
+            console.error("Error creating session:", error);
+        });
+    
+    
+        fetch(`http://localhost:8080/tasktime/${selectedTask?.taskName}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                totalTime: time
+                totalTime: totalTime
             })
         })
         .then(response => {
