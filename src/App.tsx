@@ -3,10 +3,13 @@ import './App.css'
 import Start from './components/pages/start/Start';
 import Statistics from './components/pages/statistics/Statistics';
 import Meny from './components/meny/Meny';
+import Register from './components/pages/register/Register';
+import Login from './components/pages/login/Login';
 
 function App() {
 
   const [page, setPage] = useState<string>("");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() =>{
 
@@ -35,12 +38,14 @@ function App() {
 
   return (
     <>
-     <Meny setPage={setPage} />
+     <Meny setPage={setPage} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
 
      {
       {
         "start": <Start />,
-        "statistics": <Statistics />
+        "statistics": <Statistics />,
+        "register": <Register />,
+        "login": <Login setIsLoggedIn={setIsLoggedIn} />
       } [page]
      }
     </>

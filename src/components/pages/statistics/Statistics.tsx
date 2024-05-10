@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Task from '../../interface/Interface';
 import Sessions from './Sessions'; 
+import { jwtDecode } from "jwt-decode";
 
 function Statistics() {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -8,9 +9,19 @@ function Statistics() {
     const [showTasks, setShowTasks] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:8080/tasksbytime")
+
+        const token = localStorage.getItem('token') || '';
+        const decodedToken = jwtDecode(token);
+        const id = decodedToken.sub;
+  
+            fetch(`http://localhost:8080/tasksbytime/${id}`,  {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             .then(res => res.json())
             .then(data => setTasks(data));
+        
     }, []);
 
     const selectTask = (task: Task) => {

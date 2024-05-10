@@ -5,12 +5,9 @@ function Sessions({ taskName }: { taskName: string }) {
     const [sessions, setSessions] = useState<SessionData[]>([]);
 
     useEffect(() => {
-        const url = `http://localhost:8080/session/${taskName}`;
-        
-  
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setSessions(data));
+        fetch (`http://localhost:8080/session/${taskName}`)
+        .then(res => res.json())
+        .then(data => setSessions(data));
     }, [taskName]);
 
     return ( 

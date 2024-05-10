@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Timer from '../../Timer';
 import Task from '../../interface/Interface';
 import SessionData from '../../interface/SessionData';
+import { jwtDecode } from "jwt-decode";
+
 
 
 function Start() {
@@ -9,37 +11,55 @@ function Start() {
         taskName: "",
         comment: "",
         totalTime: null
+        
     });
 
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/tasks")
+
+        const token = localStorage.getItem('token') || '';
+        const decodedToken = jwtDecode(token);
+        const id = decodedToken.sub;
+  
+            fetch(`http://localhost:8080/tasksforuser/${id}`,  {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             .then(res => res.json())
             .then(data => setTasks(data));
-    });
+        
+    }, []);
 
     const saveTask = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        fetch("http://localhost:8080/task", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ ...newTask })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Kunde inte spara uppgift!");
-                }
-                setNewTask({ ...newTask, taskName: "" });
-            })
-            .catch(error => {
-                console.error("Error saving task:", error);
-            });
-    };
+    const token = localStorage.getItem('token') || '';
+    const decodedToken = jwtDecode(token);
+    const id = decodedToken.sub;
+
+
+    fetch(`http://localhost:8080/task/${id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...newTask, id })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Kunde inte spara uppgift!");
+        }
+        setTasks([...tasks, newTask]);
+        setNewTask({ ...newTask, taskName: "" });
+    })
+    .catch(error => {
+        console.error("Error saving task:", error);
+    });
+};
 
     const selectTask = (task: Task) => {
         setSelectedTask(task);
@@ -94,6 +114,8 @@ function Start() {
             console.error("Error saving time:", error);
         });
     };
+
+    console.log(tasks);
 
     return ( 
         <div className='body'>
