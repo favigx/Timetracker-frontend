@@ -10,6 +10,7 @@ function LogoutAdminButton({ setIsLoggedInAdmin, setPage }: { setIsLoggedInAdmin
         localStorage.removeItem('token');
         setIsLoggedInAdmin(false);
         setPage('login');
+        console.log(id);
     
         
         fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/logoutadmin/${id}`, {
@@ -28,6 +29,7 @@ function LogoutAdminButton({ setIsLoggedInAdmin, setPage }: { setIsLoggedInAdmin
         })
         .catch(error => {
             console.error('Error logging out:', error);
+            console.log(id);
         });
     };
 
