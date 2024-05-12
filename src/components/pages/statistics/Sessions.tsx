@@ -21,13 +21,15 @@ function Sessions({ taskId, taskName }: { taskId: string, taskName: string }) {
             }
             const weekData = groupedSessions.get(weekNumber);
             if (weekData) {
-                weekData.sessions.push(session);
-                weekData.totalWeekTime += session.time;
+        
+                if (!weekData.sessions.some(s => s.startTime === session.startTime)) {
+                    weekData.sessions.push(session);
+                    weekData.totalWeekTime += session.time;
+                }
             }
         });
         return groupedSessions;
     };
-
     const getWeekNumber = (date: Date): number => {
         const yearStart = new Date(date.getFullYear(), 0, 1); 
         const weekStart = new Date(yearStart); 
