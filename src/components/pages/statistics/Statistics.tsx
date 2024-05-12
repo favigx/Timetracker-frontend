@@ -15,7 +15,7 @@ function Statistics() {
         const decodedToken = jwtDecode(token);
         const id = decodedToken.sub;
   
-            fetch(`http://localhost:8080/tasksbytime/${id}`,  {
+            fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/tasksbytime/${id}`,  {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

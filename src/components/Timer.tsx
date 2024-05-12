@@ -6,6 +6,11 @@ interface TimerProps {
     onStart: (sessionData: SessionData) => void;
     onStop: (sessionData: SessionData) => void;
 }
+const getWeekNumber = (date: Date): number => {
+    const oneJan = new Date(date.getFullYear(), 0, 1);
+    const numberOfDays = Math.floor((date.getTime() - oneJan.getTime()) / 86400000);
+    return Math.ceil((date.getDay() + 1 + numberOfDays) / 7);
+};
 
 
 const Timer = ({ onStart, onStop }: TimerProps) => {
@@ -14,7 +19,8 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
     const [stopped, setStopped] = useState<boolean>(false);
     const [startTime, setStartTime] = useState<string>(''); 
     const [stopTime, setStopTime] = useState<string>(''); 
-    const [sessionDate, setSessionDate] = useState<Date>(new Date()); 
+    const [sessionDate] = useState<Date>(new Date()); 
+    const [] = useState<number>(getWeekNumber(new Date()));
 
     let interval: number | undefined;
 
@@ -42,7 +48,8 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
             totalTime: time,
             time: 0,
             taskId: '',
-            taskName: ''
+            taskName: '',
+            weekNumber: getWeekNumber(currentDate),
         });
     };
 
@@ -62,7 +69,8 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
             totalTime: time,
             time: 0,
             taskId: '',
-            taskName: ''
+            taskName: '',
+            weekNumber: getWeekNumber(currentDate),
         });
         setStopped(true);
     };

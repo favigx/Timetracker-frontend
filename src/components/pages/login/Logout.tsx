@@ -10,7 +10,7 @@ function LogoutButton({ setIsLoggedIn, setPage }: { setIsLoggedIn: (loggedIn: bo
         setPage('login');
     
         
-        fetch(`http://localhost:8080/logoutuser/${id}`, {
+        fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/logoutuser/${id}`, {
             method: "POST", 
             credentials: 'include',
             headers: {

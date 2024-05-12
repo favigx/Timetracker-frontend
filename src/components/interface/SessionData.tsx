@@ -6,6 +6,7 @@ interface SessionData {
     totalTime: number;
     taskId: string;
     taskName: string;
+    weekNumber: number;
 }
 
 export default SessionData;

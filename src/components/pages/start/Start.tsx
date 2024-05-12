@@ -24,7 +24,7 @@ function Start() {
         const decodedToken = jwtDecode(token);
         const id = decodedToken.sub;
   
-            fetch(`http://localhost:8080/tasksforuser/${id}`,  {
+            fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/tasksforuser/${id}`,  {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -42,7 +42,7 @@ function Start() {
     const id = decodedToken.sub;
 
 
-    fetch(`http://localhost:8080/task/${id}`, {
+    fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/task/${id}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -56,6 +56,7 @@ function Start() {
         }
         setTasks([...tasks, newTask]);
         setNewTask({ ...newTask, taskName: "" });
+        setSelectedTask(() => newTask);
     })
     .catch(error => {
         console.error("Error saving task:", error);
@@ -72,7 +73,7 @@ function Start() {
 
     const deleteTask = (id: string) => {
         
-        fetch(`http://localhost:8080/task/${id}`, {
+        fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/task/${id}`, {
             method: "DELETE"
         })
         .then(response => {
@@ -89,9 +90,11 @@ function Start() {
     const onStopTimer = (sessionData: SessionData) => {
         const { startTime, stopTime, sessionDate, totalTime} = sessionData;
 
+        console.log("Selected Task:", selectedTask);
+
         const token = localStorage.getItem('token') || '';
     
-        fetch(`http://localhost:8080/tasksession/${selectedTask?.id}`, {
+        fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/tasksession/${selectedTask?.id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -115,7 +118,7 @@ function Start() {
         });
     
     
-        fetch(`http://localhost:8080/tasktime/${selectedTask?.id}`, {
+        fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/tasktime/${selectedTask?.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

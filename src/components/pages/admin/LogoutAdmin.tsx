@@ -12,7 +12,7 @@ function LogoutAdminButton({ setIsLoggedInAdmin, setPage }: { setIsLoggedInAdmin
         setPage('login');
     
         
-        fetch(`http://localhost:8080/logoutadmin/${id}`, {
+        fetch(`https://goldfish-app-5o3ju.ondigitalocean.app/logoutadmin/${id}`, {
             method: "POST", 
             credentials: 'include',
             headers: {

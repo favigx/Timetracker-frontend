@@ -19,7 +19,7 @@ function Register() {
     const saveUser = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        fetch("http://localhost:8080/user", {
+        fetch("https://goldfish-app-5o3ju.ondigitalocean.app/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

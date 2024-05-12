@@ -7,7 +7,7 @@ interface UserTimeData {
 function Users() {
     const [userTime, setUserTime] = useState<UserTimeData>({});
     useEffect(() => {
-        fetch("http://localhost:8080/admin/totaltime")
+        fetch("https://goldfish-app-5o3ju.ondigitalocean.app/admin/totaltime")
             .then(response => response.json())
             .then(data => {
                 setUserTime(data);

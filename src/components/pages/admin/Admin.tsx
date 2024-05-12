@@ -20,7 +20,7 @@ interface Props {
   const loginAdmin = (e: React.FormEvent<HTMLFormElement>) => {
    e.preventDefault();
 
-   fetch("http://localhost:8080/loginadmin", {
+   fetch("https://goldfish-app-5o3ju.ondigitalocean.app/loginadmin", {
        method: "POST",
        headers: {
            "Content-Type": "application/json"
