@@ -21,7 +21,7 @@ function Sessions({ taskId, taskName }: { taskId: string, taskName: string }) {
             }
             const weekData = groupedSessions.get(weekNumber);
             if (weekData) {
-        
+                // Kontrollera om sessionen redan finns i veckans sessioner
                 if (!weekData.sessions.some(s => s.startTime === session.startTime)) {
                     weekData.sessions.push(session);
                     weekData.totalWeekTime += session.time;
@@ -30,6 +30,7 @@ function Sessions({ taskId, taskName }: { taskId: string, taskName: string }) {
         });
         return groupedSessions;
     };
+
     const getWeekNumber = (date: Date): number => {
         const yearStart = new Date(date.getFullYear(), 0, 1); 
         const weekStart = new Date(yearStart); 
@@ -46,33 +47,33 @@ function Sessions({ taskId, taskName }: { taskId: string, taskName: string }) {
 
     const groupedSessions = groupSessionsByWeekAndDay(sessions);
 
-    return ( 
-        <div className='body'>
-            <div className='statisticMessage'>
-                <h2>Statistik för uppgift: {taskName}</h2>
-                <div>
-                    {[...groupedSessions.entries()].map(([weekNumber, { sessions: weekSessions, totalWeekTime }]) => (
-                        <div key={weekNumber}>
-                            <h2>Vecka {weekNumber}</h2>
-                            <p>Din totala tid den här veckan är: {formatTime(totalWeekTime)}</p>
-                            {[...weekSessions.map(session => session.sessionDate)].map((sessionDate, index) => (
-                                <div key={index}>
-                                    <h3>{sessionDate}</h3>
-                                    {weekSessions.filter(session => session.sessionDate === sessionDate).map((session: SessionData) => (
-                                        <div key={session.startTime}>
-                                            <p>Starttid: {session.startTime}</p>
-                                            <p>Sluttid: {session.stopTime}</p>
-                                            <p>Total tid för session: {formatTime(session.time)}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div>
+    return (
+    <div className='body'>
+        <div className='statisticMessage'>
+            <h2>Statistik för uppgift: {taskName}</h2>
+            <div>
+                {[...groupedSessions.entries()].map(([weekNumber, { sessions: weekSessions, totalWeekTime }]) => (
+                    <div key={weekNumber}>
+                        <h2>Vecka {weekNumber}</h2>
+                        <p>Din totala tid den här veckan är: {formatTime(totalWeekTime)}</p>
+                        {[...new Set(weekSessions.map(session => session.sessionDate))].map((sessionDate, index) => (
+                            <div key={index}>
+                                <h3>{sessionDate}</h3>
+                                {weekSessions.filter(session => session.sessionDate === sessionDate).map((session: SessionData) => (
+                                    <div key={session.startTime}>
+                                        <p>Starttid: {session.startTime}</p>
+                                        <p>Sluttid: {session.stopTime}</p>
+                                        <p>Total tid för session: {formatTime(session.time)}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
         </div>
-    );
+    </div>
+);
 }
 
 
