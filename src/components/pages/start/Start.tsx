@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 
 function Start() {
     const [newTask, setNewTask] = useState<Task>({
+        id: "",
         taskName: "",
         comment: "",
         totalTime: null
@@ -68,15 +69,33 @@ function Start() {
     const goBack = () => {
         setSelectedTask(null);
     };
+
+    const deleteTask = (id: string) => {
+        
+        fetch(`http://localhost:8080/task/${id}`, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Kunde inte ta bort uppgiften!");
+            }
+            setTasks(tasks.filter(task => task.id !== id));
+        })
+        .catch(error => {
+            console.error("Error deleting task:", error);
+        });
+    };
     
     const onStopTimer = (sessionData: SessionData) => {
         const { startTime, stopTime, sessionDate, totalTime} = sessionData;
+
+        const token = localStorage.getItem('token') || '';
     
-    
-        fetch(`http://localhost:8080/tasksession/${selectedTask?.taskName}`, {
+        fetch(`http://localhost:8080/tasksession/${selectedTask?.id}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 startTime: startTime,
@@ -96,10 +115,11 @@ function Start() {
         });
     
     
-        fetch(`http://localhost:8080/tasktime/${selectedTask?.taskName}`, {
+        fetch(`http://localhost:8080/tasktime/${selectedTask?.id}`, {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 totalTime: totalTime
@@ -115,7 +135,7 @@ function Start() {
         });
     };
 
-    console.log(tasks);
+    
 
     return ( 
         <div className='body'>
@@ -131,6 +151,7 @@ function Start() {
                         {tasks.map((task: Task) =>(
                             <div key={task.taskName}>
                                 <button onClick={() => selectTask(task)}>{task.taskName}</button>
+                                <button onClick={() => deleteTask(task.id)}>Ta bort</button>
                             </div>
                         ))}
                     </div>

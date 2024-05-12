@@ -1,31 +1,31 @@
 import { useState } from 'react';
 
-interface Login{
+interface Admin{
    username: string;
    password: string;
 }
 
 interface Props {
-    setIsLoggedIn: (loggedIn: boolean) => void;
+    setIsLoggedInAdmin: (loggedInAdmin: boolean) => void;
     setPage: (page: string) => void;
  }
 
- function Login({ setIsLoggedIn, setPage }: Props) {
-    const [newLogin, setNewLogin] = useState<Login>({
+ function Admin({ setIsLoggedInAdmin, setPage }: Props) {
+    const [newLoginAdmin, setNewLoginAdmin] = useState<Admin>({
        username: "",
        password: ""
     });
     
 
-  const loginUser = (e: React.FormEvent<HTMLFormElement>) => {
+  const loginAdmin = (e: React.FormEvent<HTMLFormElement>) => {
    e.preventDefault();
 
-   fetch("http://localhost:8080/loginuser", {
+   fetch("http://localhost:8080/loginadmin", {
        method: "POST",
        headers: {
            "Content-Type": "application/json"
        },
-       body: JSON.stringify({ ...newLogin })
+       body: JSON.stringify({ ...newLoginAdmin })
    })
    .then(response => {
        if (!response.ok) {
@@ -38,9 +38,9 @@ interface Props {
      
        localStorage.setItem("token", token);
 
-       setIsLoggedIn(true);
+       setIsLoggedInAdmin(true);
 
-       setPage("start");
+       setPage("users");
        
    })
    .catch(error => {
@@ -50,14 +50,15 @@ interface Props {
 
     return ( 
         <div className="login">
-           <form onSubmit={loginUser}>
+           <form onSubmit={loginAdmin}>
+            <h2>Admin inloggning</h2>
            <label>
                 Användarnamn<br />
-                <input className="inputForm" type="text" required value={newLogin.username} onChange={(e) => setNewLogin({ ...newLogin, username: e.target.value })}></input>
+                <input className="inputForm" type="text" required value={newLoginAdmin.username} onChange={(e) => setNewLoginAdmin({ ...newLoginAdmin, username: e.target.value })}></input>
             </label><br /><br />
             <label>
                 Lösenord<br />
-                <input className="inputForm" type="password" required value={newLogin.password} onChange={(e) => setNewLogin({ ...newLogin, password: e.target.value })}></input>
+                <input className="inputForm" type="password" required value={newLoginAdmin.password} onChange={(e) => setNewLoginAdmin({ ...newLoginAdmin, password: e.target.value })}></input>
             </label><br /><br />
            <button type="submit">Logga in</button>
            </form>
@@ -65,4 +66,4 @@ interface Props {
      );
 }
 
-export default Login;
+export default Admin;

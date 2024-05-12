@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import SessionData from './interface/SessionData';
+import { formatTime } from './pages/statistics/formatTime'
 
 interface TimerProps {
     onStart: (sessionData: SessionData) => void;
@@ -40,6 +41,7 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
             sessionDate: sessionDate.toLocaleDateString('sv-SE'), 
             totalTime: time,
             time: 0,
+            taskId: '',
             taskName: ''
         });
     };
@@ -59,16 +61,10 @@ const Timer = ({ onStart, onStop }: TimerProps) => {
             sessionDate: currentDate.toLocaleDateString('sv-SE'), 
             totalTime: time,
             time: 0,
+            taskId: '',
             taskName: ''
         });
         setStopped(true);
-    };
-
-    const formatTime = (time: number) => {
-        const hours = Math.floor(time / 3600);
-        const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, '0');
-        const seconds = (time % 60).toString().padStart(2, '0');
-        return `${hours}:${minutes}:${seconds}`;
     };
 
     return (

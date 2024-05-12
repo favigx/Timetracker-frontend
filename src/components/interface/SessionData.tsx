@@ -4,6 +4,7 @@ interface SessionData {
     sessionDate: string;
     time: number;
     totalTime: number;
+    taskId: string;
     taskName: string;
 }
 

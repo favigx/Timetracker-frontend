@@ -40,13 +40,24 @@ function Register() {
 
     return ( 
         <div className="register">
-           <h2>Registrera dig</h2>
            <form onSubmit={saveUser}>
-                        <input className="inputForm" type="text" value={newUser.username} onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}></input>
-                        <input className="inputForm" type="text" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}></input>
-                        <input className="inputForm" type="text" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}></input>
-                        <input className="inputForm" type="text" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}></input>
-                        <button type="submit">Registrera</button>
+                        <label>
+                            Användarnamn<br />
+                            <input className="inputForm" type="text" required value={newUser.username} onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}></input>
+                        </label><br /><br />
+                        <label>
+                            Lösenord<br />
+                            <input className="inputForm" type="password" required value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}></input>
+                        </label><br /><br />
+                        <label>
+                            Förnamn<br />
+                            <input className="inputForm" type="text" required value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}></input>
+                        </label><br /><br />
+                        <label>
+                            Mail<br />
+                            <input className="inputForm" type="email" required value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}></input>
+                        </label><br /><br />
+                        <button type="submit">Registrera dig!</button>
                     </form>
         </div>
      );

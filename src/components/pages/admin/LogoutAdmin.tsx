@@ -1,16 +1,18 @@
 import { jwtDecode } from "jwt-decode";
 
-function LogoutButton({ setIsLoggedIn, setPage }: { setIsLoggedIn: (loggedIn: boolean) => void; setPage: (page: string) => void; }) {
-    const handleLogout = () => {
+function LogoutAdminButton({ setIsLoggedInAdmin, setPage }: { setIsLoggedInAdmin: (loggedInAdmin: boolean) => void; setPage: (page: string) => void; }) {
+    const handleLogoutAdmin = () => {
+
         const token = localStorage.getItem('token') || '';
         const decodedToken = jwtDecode(token);
         const id = decodedToken.sub;
+        
         localStorage.removeItem('token');
-        setIsLoggedIn(false);
+        setIsLoggedInAdmin(false);
         setPage('login');
     
         
-        fetch(`http://localhost:8080/logoutuser/${id}`, {
+        fetch(`http://localhost:8080/logoutadmin/${id}`, {
             method: "POST", 
             credentials: 'include',
             headers: {
@@ -30,8 +32,8 @@ function LogoutButton({ setIsLoggedIn, setPage }: { setIsLoggedIn: (loggedIn: bo
     };
 
     return (
-        <button onClick={handleLogout}>Logga ut</button>
+        <button onClick={handleLogoutAdmin}>Logga ut</button>
     );
 }
 
-export default LogoutButton;
+export default LogoutAdminButton;

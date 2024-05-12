@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Task from '../../interface/Interface';
 import Sessions from './Sessions'; 
 import { jwtDecode } from "jwt-decode";
+import { formatTime } from './formatTime';
 
 function Statistics() {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -40,15 +41,15 @@ function Statistics() {
                 {showTasks ? (
                     <>
                         {tasks.map((task: Task) =>(
-                            <div key={task.taskName}>
-                                <button onClick={() => selectTask(task)}>{task.taskName + " " + "total tid: " + task.totalTime}</button>
+                            <div key={task.id}>
+                                <button onClick={() => selectTask(task)}>{task.taskName + " " + "total tid: " + (task.totalTime !== null ? formatTime(task.totalTime) : 'Ingen tid')}</button>
                             </div>
                         ))}
                     </>
                 ) : (
                     <>
                         <button onClick={goBack}>Gå tillbaka till alla uppgifter</button>
-                        <Sessions taskName={selectedTask?.taskName || ''} />
+                        <Sessions taskId={selectedTask?.id || ''} taskName={selectedTask?.taskName || ''} />
                     </>
                 )}
             </div>
